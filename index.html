@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Light — Світло над містом</title>
+  <script>
+    // ховаємо екран до старту інтро, щоб не було «спалаху» готового макета
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("intro");
+  </script>
+  <style>
+    .intro .hero > *:not(.hero__bg), .intro .hero__bg { visibility: hidden; }
+    @font-face { font-family: "Gella Display"; src: url("fonts/GellaDisplay-Light.otf") format("opentype"); font-weight: 300; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("fonts/Gilroy-Light.woff") format("woff"); font-weight: 300; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("fonts/Gilroy-Regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("fonts/Gilroy-Medium.woff") format("woff"); font-weight: 500; font-display: swap; }
+    @font-face { font-family: "Gilroy"; src: url("fonts/Gilroy-SemiBold.woff") format("woff"); font-weight: 600; font-display: swap; }
+
+    :root {
+      /* палітра The Light */
+      --ink: #222222;
+      --night: #1a1f2e;
+      --teal: #587478;
+      --mist: #EAF6FB;
+      --haze: #D7E7ED;
+      --white: #ffffff;
+      --dim: rgba(255, 255, 255, .62);
+      --line: rgba(255, 255, 255, .22);
+
+      --pad: clamp(16px, 2vw, 32px);
+      --fs-ui: clamp(12px, .85vw, 15px);
+      --cols: 1.4fr .9fr 2fr 1fr; /* спільна сітка для шапки й середнього рядка */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: var(--night); color: var(--white); }
+    body { font-family: "Gilroy", Arial, sans-serif; font-weight: 400; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      position: relative;
+      min-height: 100vh; min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: var(--pad);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .hero__bg { position: absolute; inset: 0; z-index: -1; }
+    .hero__bg img {
+      width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%;
+      transform-origin: 62% 55%; will-change: transform, filter;
+    }
+    .hero__bg::after { /* затемнення зверху та знизу під текст */
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(20,24,36,.55) 0%, rgba(20,24,36,0) 22%),
+        linear-gradient(270deg, rgba(20,24,36,.35) 0%, rgba(20,24,36,0) 30%),
+        linear-gradient(0deg, rgba(20,24,36,.7) 0%, rgba(20,24,36,0) 45%);
+    }
+
+    /* ---------- HEADER: 5-колонкова сітка ---------- */
+    .hdr {
+      display: grid;
+      grid-template-columns: var(--cols); /* ті самі колонки, що й у .mid — меню стоїть на одній лінії з текстом */
+      align-items: start;
+      gap: var(--pad);
+      font-size: var(--fs-ui);
+      line-height: 1.35;
+    }
+    .hdr__logo img { height: clamp(30px, 2.6vw, 44px); width: auto; display: block; }
+    .hdr__tag { color: var(--dim); }
+    .hdr__nav { display: flex; flex-direction: column; }
+    .hdr__nav a, .hdr__right a { position: relative; width: fit-content; transition: opacity .3s; }
+    .hdr__nav a:hover, .hdr__right a:hover { opacity: .6; }
+    .hdr sup { font-size: .68em; margin-left: 2px; color: var(--dim); }
+    .hdr__right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+    .hdr__phone { font-weight: 600; }
+
+    /* ---------- MIDDLE: лінія + інтро ---------- */
+    .mid {
+      align-self: center;
+      display: grid;
+      grid-template-columns: var(--cols);
+      gap: var(--pad);
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: var(--fs-ui);
+      line-height: 1.35;
+      margin-top: -6vh;
+    }
+    .mid__label { color: var(--dim); font-size: .78em; letter-spacing: .04em; padding-top: .35em; justify-self: end; }
+    .mid__lead {
+      font-family: "Gilroy"; font-weight: 300;
+      font-size: clamp(17px, 1.45vw, 26px);
+      line-height: 1.28;
+      max-width: 30ch;
+    }
+    .mid__cta {
+      display: inline-flex; gap: .5em; align-items: center; align-self: start; justify-self: end; white-space: nowrap;
+      padding: .75em 1.3em; border: 1px solid var(--white); border-radius: 100px;
+      background: var(--white); color: var(--ink); font-weight: 500;
+      letter-spacing: .02em; transition: gap .3s, background .3s, color .3s, border-color .3s;
+    }
+    .mid__cta:hover { gap: .9em; background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+    /* ---------- BOTTOM: великий заголовок із 3 слів ---------- */
+    .title {
+      font-family: "Gella Display", "Times New Roman", serif;
+      font-weight: 300;
+      text-transform: uppercase;
+      font-size: clamp(56px, 11.2vw, 230px);
+      line-height: .84;
+      letter-spacing: -.01em;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      margin-bottom: -.06em;
+    }
+    .title span { display: block; overflow: hidden; padding-top: .06em; will-change: transform; }
+    .title i { display: inline-block; font-style: normal; }
+    .title .ch { display: inline-block; font-weight: inherit; will-change: transform; }
+    .w1 { grid-column: 1 / 7; }
+    .w2 { grid-column: 9 / 13; justify-self: end; }
+    .w3 { grid-column: 4 / 13; }
+
+    /* лінія під шапкою — окремий елемент, щоб її можна було «прокреслити» */
+    .mid { border-top: 0; position: relative; }
+    .mid__rule { position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--line); transform-origin: 0 50%; }
+    .mid__intro { position: relative; }
+    .mid__lead .wd { display: inline-block; will-change: transform, opacity, filter; }
+
+    /* ---------- світло за курсором + світловий промінь ---------- */
+    .hero__glow {
+      position: absolute; left: 0; top: 0; width: 46vmax; height: 46vmax; margin: -23vmax 0 0 -23vmax;
+      border-radius: 50%; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
+      background: radial-gradient(circle, rgba(255,226,180,.95) 0%, rgba(255,214,160,.35) 32%, rgba(255,214,160,0) 66%);
+    }
+    .hero__sweep {
+      position: absolute; inset: -20% -60%; pointer-events: none; opacity: 0; mix-blend-mode: screen;
+      background: linear-gradient(105deg, transparent 38%, rgba(255,232,205,.0) 42%, rgba(255,232,205,.38) 50%, rgba(255,232,205,0) 58%, transparent 62%);
+    }
+
+    /* ---------- брелок: обертовий бейдж ---------- */
+    .badge {
+      position: absolute; left: 0; top: calc(100% + clamp(14px, 2.6vh, 36px));
+      width: clamp(96px, 7vw, 124px); aspect-ratio: 1; display: grid; place-items: center;
+      color: var(--white);
+    }
+    .badge svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 18s linear infinite; animation-play-state: var(--spin, paused); }
+    .badge text { font-family: "Gilroy"; font-weight: 500; font-size: 8.6px; letter-spacing: .5px; fill: currentColor; text-transform: uppercase; }
+    .badge__ring { fill: none; stroke: rgba(255,255,255,.18); }
+    .badge__core {
+      position: relative; width: 38%; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+      background: radial-gradient(circle at 50% 45%, #fff7e8 0%, #ffe3b8 38%, rgba(255,214,160,.0) 72%);
+      color: var(--ink); font-size: 15px; transition: transform .5s cubic-bezier(.19,1,.22,1);
+    }
+    .badge__core::before { /* пульсуючий ореол «світла» */
+      content: ""; position: absolute; inset: -40%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,222,170,.55), rgba(255,222,170,0) 65%);
+      animation: pulse 2.8s ease-in-out infinite; z-index: -1;
+    }
+    .badge__core span { transition: transform .5s cubic-bezier(.19,1,.22,1); }
+    .badge:hover .badge__core { transform: scale(1.18); }
+    .badge:hover .badge__core span { transform: translateY(3px); }
+    .badge:hover svg { animation-duration: 6s; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0%,100% { transform: scale(.85); opacity: .55; } 50% { transform: scale(1.15); opacity: 1; } }
+
+    /* ---------- прелоадер ---------- */
+    .pre { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+    .pre__logo { position: absolute; left: 50%; top: calc(50% - 30px); transform: translate(-50%, -100%); height: clamp(40px, 4vw, 60px); opacity: 0; }
+    .pre__line {
+      position: absolute; left: 0; right: 0; top: 50%; height: 1px; transform: scaleX(0);
+      background: linear-gradient(90deg, rgba(255,240,215,0), rgba(255,244,226,1) 50%, rgba(255,240,215,0));
+      box-shadow: 0 0 18px 2px rgba(255,226,180,.55);
+    }
+    .pre__count {
+      position: absolute; left: var(--pad); bottom: calc(var(--pad) - .1em);
+      font-family: "Gella Display", serif; font-weight: 300; line-height: .8;
+      font-size: clamp(64px, 9vw, 170px); font-variant-numeric: tabular-nums;
+    }
+    .pre__count sup { font-family: "Gilroy"; font-size: .14em; vertical-align: top; margin-left: .3em; color: var(--dim); }
+    .pre__cap { position: absolute; right: var(--pad); bottom: var(--pad); font-size: var(--fs-ui); color: var(--dim); text-align: right; line-height: 1.35; }
+
+    /* ---------- планшет ---------- */
+    @media (max-width: 1024px) {
+      :root { --cols: 1fr 2fr 1fr; }
+      .hdr__tag { display: none; }
+      .mid { row-gap: 18px; }
+      .mid__intro { display: none; }
+      .badge { display: none; }
+      .mid__label { justify-self: start; }
+      .mid__cta { grid-column: 2 / 4; justify-self: start; }
+    }
+    /* ---------- мобільний ---------- */
+    @media (max-width: 640px) {
+      .hdr { grid-template-columns: 1fr auto; }
+      .hdr__nav { display: none; }
+      .mid { grid-template-columns: 1fr; margin-top: 0; }
+      .hdr__right .hdr__tag { display: none; }
+      .mid__cta { grid-column: 1; }
+      .mid__lead { font-size: 18px; }
+      .title { font-size: clamp(44px, 17vw, 96px); line-height: .9; }
+      .w1 { grid-column: 1 / 13; }
+      .w2 { grid-column: 1 / 13; justify-self: end; }
+      .w3 { grid-column: 1 / 13; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero" aria-label="The Light — перший екран">
+    <div class="hero__bg" aria-hidden="true">
+      <img src="img/hero.webp" alt="">
+      <div class="hero__sweep"></div>
+      <div class="hero__glow"></div>
+    </div>
+
+    <header class="hdr">
+      <a class="hdr__logo" href="#" aria-label="The Light — головна"><img src="img/logo.png" alt="The Light"></a>
+      <span class="hdr__tag">ЖК The Light<br>Київ</span>
+      <nav class="hdr__nav" aria-label="Основна навігація">
+        <a href="#photo">Фото</a>
+        <a href="#plans">Планування<sup>920</sup></a>
+        <a href="#genplan">Генплан</a>
+        <a href="#location">Локація</a>
+        <a href="#contacts">Контакти</a>
+      </nav>
+      <div class="hdr__right">
+        <a class="hdr__phone" href="tel:+380442325550">044 232 55 50</a>
+        <span class="hdr__tag">пн–пт 09:00–20:00</span>
+      </div>
+    </header>
+
+    <div class="mid">
+      <span class="mid__rule" aria-hidden="true"></span>
+      <div class="mid__intro">
+        <p>Багатофункціональний<br>проєкт класу бізнес-плюс</p>
+        <a class="badge" href="#about" aria-label="Гортати далі">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="ring" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs>
+            <circle class="badge__ring" cx="60" cy="60" r="58.5"/>
+            <text><textPath href="#ring" textLength="292" lengthAdjust="spacing">The Light · бізнес-плюс · Київ · 2026 ·</textPath></text>
+          </svg>
+          <span class="badge__core"><span>↓</span></span>
+        </a>
+      </div>
+      <span class="mid__label">Про проєкт</span>
+      <p class="mid__lead">Квартал із 920 квартир і панорамних терас, де ранкове світло, вечірнє місто й простір для життя, роботи та відпочинку — поруч.</p>
+      <a class="mid__cta" href="#visit">Записатися на перегляд <span aria-hidden="true">→</span></a>
+    </div>
+
+    <h1 class="title" aria-label="Світло над містом">
+      <span class="w1"><i>Світло</i></span>
+      <span class="w2"><i>над</i></span>
+      <span class="w3"><i>містом</i></span>
+    </h1>
+  </section>
+
+  <!-- Прелоадер: лінія світла → «розкриття» кадру -->
+  <div class="pre" aria-hidden="true">
+    <img class="pre__logo" src="img/logo.png" alt="">
+    <div class="pre__line"></div>
+    <div class="pre__count"><span>000</span><sup>%</sup></div>
+    <div class="pre__cap">ЖК The Light<br>Київ, вул. Джона Маккейна, 5</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="intro.js"></script>
+
+</body>
+</html>
